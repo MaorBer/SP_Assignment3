@@ -45,24 +45,40 @@ size_t StrList_size(const StrList* StrList) {
 }
 
 void StrList_insertLast(StrList* StrList, const char* data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
-    newNode->data = strdup(data);
-    newNode->next = NULL;
+    // Parse the input string to extract individual words
+    const char* delimiter = " ";
+    char* token = strtok((char*)data, delimiter);
 
-    if (StrList->head == NULL) {
-        StrList->head = newNode;
-    } else {
-        Node* current = StrList->head;
-        while (current->next != NULL) {
-            current = current->next;
+    while (token != NULL) {
+        // Allocate memory for the new node
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        if (newNode == NULL) {
+            fprintf(stderr, "Memory allocation failed\n");
+            exit(EXIT_FAILURE);
         }
-        current->next = newNode;
+
+        // Allocate memory and copy the word into the new node
+        newNode->data = strdup(token);
+        newNode->next = NULL;
+
+        // If the list is empty, set the new node as the head
+        if (StrList->head == NULL) {
+            StrList->head = newNode;
+        } else {
+            // Traverse the list to find the last node
+            Node* current = StrList->head;
+            while (current->next != NULL) {
+                current = current->next;
+            }
+            // Append the new node to the end of the list
+            current->next = newNode;
+        }
+
+        // Move to the next word
+        token = strtok(NULL, delimiter);
     }
 }
+
 
 void StrList_insertAt(StrList* StrList, const char* data, int index) {
     if (index < 0 || index > StrList_size(StrList)) {
