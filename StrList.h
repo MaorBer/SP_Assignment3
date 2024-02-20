@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #pragma once
 
 #include <stdlib.h>
@@ -111,3 +112,33 @@ void StrList_sort( StrList* StrList);
  */
 int StrList_isSorted(StrList* StrList);
 
+=======
+#ifndef STRLIST_H
+#define STRLIST_H
+
+typedef struct Node {
+    char *data;
+    struct Node *next;
+} Node;
+
+typedef struct {
+    Node *head;
+} StrList;
+
+void initializeList(StrList *list);
+void insertAtEnd(StrList *list, const char *data);
+void insertAtIndex(StrList *list, int index, const char *data);
+void printList(const StrList *list);
+int listLength(const StrList *list);
+char* getStringAtIndex(const StrList *list, int index);
+int countCharacters(const StrList *list);
+int countOccurrences(const StrList *list, const char *target);
+void deleteOccurrences(StrList *list, const char *target);
+void deleteAtIndex(StrList *list, int index);
+void reverseList(StrList *list);
+void sortList(StrList *list);
+int isSorted(const StrList *list);
+void clearList(StrList *list);
+
+#endif
+>>>>>>> Stashed changes
