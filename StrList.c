@@ -10,7 +10,7 @@ struct _StrList {
 typedef struct Node {
     char *data;
     struct Node *next;
-} Node_StrList;
+} Node;
 
 StrList* StrList_alloc() {
     StrList* list = (StrList*)malloc(sizeof(StrList));
