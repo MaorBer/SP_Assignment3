@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 #pragma once
 
 #include <stdlib.h>
@@ -41,13 +40,13 @@ size_t StrList_size(const StrList* StrList);
  * Inserts an element in the end of the StrList.
  */
 void StrList_insertLast(StrList* StrList,
-					  const char* data);
+                      const char* data);
 
 /*
 * Inserts an element at given index
 */
 void StrList_insertAt(StrList* StrList,
-	const char* data,int index);
+    const char* data,int index);
 
 /*
  * Returns the StrList first data.
@@ -75,12 +74,12 @@ Given a string, return the number of times it exists in the list.
 int StrList_count(StrList* StrList, const char* data);
 
 /*
-	Given a string and a list, remove all the appearences of this string in the list.
+    Given a string and a list, remove all the appearances of this string in the list.
 */
 void StrList_remove(StrList* StrList, const char* data);
 
 /*
-	Given an index and a list, remove the string at that index.
+    Given an index and a list, remove the string at that index.
 */
 void StrList_removeAt(StrList* StrList, int index);
 
@@ -97,48 +96,19 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2);
 StrList* StrList_clone(const StrList* StrList);
 
 /*
- * Reverces the given StrList. 
+ * Reverses the given StrList. 
  */
-void StrList_reverse( StrList* StrList);
+void StrList_reverse(StrList* StrList);
 
 /*
- * Sort the given list in lexicographical order 
+ * Sorts the given list in lexicographical order 
  */
-void StrList_sort( StrList* StrList);
+void StrList_sort(StrList* StrList);
 
 /*
  * Checks if the given list is sorted in lexicographical order
  * returns 1 for sorted,   0 otherwise
  */
-int StrList_isSorted(StrList* StrList);
+int StrList_isSorted(const StrList* StrList);
 
-=======
-#ifndef STRLIST_H
-#define STRLIST_H
-
-typedef struct Node {
-    char *data;
-    struct Node *next;
-} Node;
-
-typedef struct {
-    Node *head;
-} StrList;
-
-void initializeList(StrList *list);
-void insertAtEnd(StrList *list, const char *data);
-void insertAtIndex(StrList *list, int index, const char *data);
-void printList(const StrList *list);
-int listLength(const StrList *list);
-char* getStringAtIndex(const StrList *list, int index);
-int countCharacters(const StrList *list);
-int countOccurrences(const StrList *list, const char *target);
-void deleteOccurrences(StrList *list, const char *target);
-void deleteAtIndex(StrList *list, int index);
-void reverseList(StrList *list);
-void sortList(StrList *list);
-int isSorted(const StrList *list);
-void clearList(StrList *list);
-
-#endif
->>>>>>> Stashed changes
+#endif /* STRLIST_H */
