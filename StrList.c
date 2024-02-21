@@ -115,9 +115,13 @@ char* StrList_firstData(const StrList* StrList) {
 
 void StrList_print(const StrList* StrList) {
     Node* current = StrList->head;
-    while (current != NULL) {
-        printf("%s ", current->data);
+    if(current != NULL){
+        printf("%s", current->data);
         current = current->next;
+        do{
+            printf(" %s", current->data);
+            current = current->next;
+        }while (current != NULL)
     }
     printf("\n");
 }
