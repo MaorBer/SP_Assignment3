@@ -237,9 +237,34 @@ void StrList_reverse(StrList* StrList) {
 }
 
 void StrList_sort(StrList* StrList) {
-    // Sorting algorithm goes here
+    if (!StrList || !StrList->head || !StrList->head->next) return; // No need to sort if the list is empty or has one element
+
+    Node *sorted = NULL, *current = StrList->head, *next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        if (!sorted || strcmp(current->data, sorted->data) < 0) { // Insert before the sorted list
+            current->next = sorted;
+            sorted = current;
+        } else {
+            Node *temp = sorted;
+            while (temp->next != NULL && strcmp(current->data, temp->next->data) >= 0) {
+                temp = temp->next;
+            }
+            current->next = temp->next;
+            temp->next = current;
+        }
+        current = next;
+    }
+    StrList->head = sorted; // Update head to the new sorted list
 }
 
+
 int StrList_isSorted(const StrList* StrList) {
-    // Check if the list is sorted
+    Node* current = StrList->head;
+    while (current != NULL && current->next != NULL) {
+        if (strcmp(current->data, current->next->data) > 0) return 0; // Not sorted if current node data is greater than next node data
+        current = current->next;
+    }
+    return 1; // Sorted
 }
+
