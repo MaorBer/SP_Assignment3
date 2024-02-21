@@ -2,24 +2,19 @@
 
 CC = gcc
 CFLAGS = -Wall -g
-TARGET = Main
+TARGET = StrList
 OBJS = StrList.o Main.o
 
-# The 'all' target builds the specified TARGET
 all: $(TARGET)
 
-# Link the program
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
-# Compile StrList.o from StrList.c
 StrList.o: StrList.c StrList.h
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c StrList.c
 
-# Compile Main.o from Main.c
 Main.o: Main.c StrList.h
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c Main.c
 
-# The 'clean' target removes all built files
 clean:
 	rm -f $(TARGET) $(OBJS)

@@ -201,15 +201,16 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2) {
     return current1 == NULL && current2 == NULL;
 }
 
-StrList* StrList_clone(const StrList* StrList) {
+StrList* StrList_clone(const StrList* list) {
     StrList* newList = StrList_alloc();
-    Node* current = StrList->head;
+    Node* current = list->head; // Use the correct list variable
     while (current != NULL) {
         StrList_insertLast(newList, current->data);
         current = current->next;
     }
-    return newList;
+    return newList; // Ensure this return statement is present
 }
+
 
 void StrList_reverse(StrList* StrList) {
     Node* prev = NULL;
@@ -247,7 +248,7 @@ void StrList_sort(StrList* StrList) {
 }
 
 
-int StrList_isSorted(const StrList* StrList) {
+int StrList_isSorted(StrList* StrList) {
     Node* current = StrList->head;
     while (current != NULL && current->next != NULL) {
         if (strcmp(current->data, current->next->data) > 0) return 0; // Not sorted if current node data is greater than next node data
@@ -255,4 +256,5 @@ int StrList_isSorted(const StrList* StrList) {
     }
     return 1; // Sorted
 }
+
 
