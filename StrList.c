@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Forward declaration of Node
 typedef struct Node {
     char *data;
     struct Node *next;
@@ -12,102 +13,84 @@ struct _StrList {
     Node *head;
 };
 
-// Allocate a new, empty StrList
 StrList* StrList_alloc() {
     StrList* list = (StrList*)malloc(sizeof(StrList));
-    if (!list) {
-        fprintf(stderr, "Memory allocation failed for StrList\n");
-        return NULL;
+    if (list == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
     }
     list->head = NULL;
     return list;
 }
 
-// Free the StrList and its contents
 void StrList_free(StrList* list) {
-    if (!list) return;
+    if (list == NULL) return;
     Node* current = list->head;
-    while (current) {
+    while (current != NULL) {
         Node* next = current->next;
-        free(current->data); // Free the string
-        free(current); // Then the node
+        free(current->data);
+        free(current);
         current = next;
     }
     free(list);
 }
 
-// Get the size of the StrList
 size_t StrList_size(const StrList* list) {
-    if (!list) return 0;
     size_t count = 0;
-    for (Node* current = list->head; current; current = current->next) {
+    Node* current = list->head;
+    while (current != NULL) {
         count++;
+        current = current->next;
     }
     return count;
 }
 
-// Insert a string at the end of the StrList
 void StrList_insertLast(StrList* list, const char* data) {
-    if (!list || !data) return;
     Node* newNode = (Node*)malloc(sizeof(Node));
-    if (!newNode) {
-        fprintf(stderr, "Memory allocation failed for Node\n");
-        return;
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
     }
-    newNode->data = strdup(data);
-    if (!newNode->data) {
-        fprintf(stderr, "String duplication failed\n");
-        free(newNode);
-        return;
-    }
+    newNode->data = strdup(data); // Directly copy the input string
     newNode->next = NULL;
 
-    if (!list->head) {
+    if (list->head == NULL) {
         list->head = newNode;
     } else {
         Node* current = list->head;
-        while (current->next) {
+        while (current->next != NULL) {
             current = current->next;
         }
         current->next = newNode;
     }
 }
 
-// Insert a string at a specified index in the StrList
+
 void StrList_insertAt(StrList* list, const char* data, int index) {
-    if (!list || !data || index < 0 || index > StrList_size(list)) {
-        fprintf(stderr, "Invalid operation: Invalid index or NULL data/list\n");
-        return;
+    if (index < 0 || index > StrList_size(list)) {
+        fprintf(stderr, "Invalid index\n");
+        return; // Use return instead of exit, to not terminate the entire program
     }
     Node* newNode = (Node*)malloc(sizeof(Node));
-    if (!newNode) {
-        fprintf(stderr, "Memory allocation failed for Node\n");
-        return;
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
     }
     newNode->data = strdup(data);
-    if (!newNode->data) {
-        fprintf(stderr, "String duplication failed\n");
-        free(newNode);
-        return;
-    }
+    newNode->next = NULL;
 
     if (index == 0) {
         newNode->next = list->head;
         list->head = newNode;
     } else {
         Node* current = list->head;
-        for (int i = 0; i < index - 1; ++i) {
+        for (int i = 0; i < index - 1; i++) {
             current = current->next;
         }
         newNode->next = current->next;
         current->next = newNode;
     }
 }
-
-// Keep other functions as they are but apply similar checks for NULL pointers and ensure
-// proper memory management, especially after operations like strdup fail.
-
-
 
 char* StrList_firstData(const StrList* StrList) {
     if (StrList->head == NULL) {
@@ -119,7 +102,6 @@ char* StrList_firstData(const StrList* StrList) {
 
 void StrList_print(const StrList* list) {
     if (list->head == NULL) {
-        printf("List is empty\n");
         return;
     }
     Node* current = list->head;
@@ -128,7 +110,6 @@ void StrList_print(const StrList* list) {
         if (current->next != NULL) printf(" "); // Add space between words, but not after the last word
         current = current->next;
     }
-    printf("\n"); // Print newline at the end
 }
 
 void StrList_printAt(const StrList* StrList, int index) {
@@ -273,5 +254,4 @@ int StrList_isSorted(StrList* StrList) {
     }
     return 1; // Sorted
 }
-
 
