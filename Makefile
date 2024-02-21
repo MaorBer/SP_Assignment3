@@ -1,19 +1,20 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
-LDFLAGS =
+.PHONY: all clean
 
+CC = gcc
+CFLAGS = -Wall -g
 TARGET = Main
 OBJS = StrList.o Main.o
 
-.PHONY: all clean
-
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
-    $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+Main: $(OBJS)
+	$(CC) $(CFLAGS) -o Main $(OBJS)
 
-%.o: %.c StrList.h
-    $(CC) $(CFLAGS) -c $<
+StrList.o: StrList.c StrList.h
+	$(CC) $(CFLAGS) -c StrList.c
+
+Main.o: Main.c StrList.h
+	$(CC) $(CFLAGS) -c Main.c
 
 clean:
-    $(RM) $(TARGET) $(OBJS)
+	rm -f Main $(OBJS)
