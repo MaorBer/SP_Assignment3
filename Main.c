@@ -40,12 +40,9 @@ int main() {
                 printf("Enter the number of words you want to enter: ");
                 scanf("%d", &numWords);
                 getchar(); // Consume the newline character
-                for (int i = 0; i < numWords; i++) {
-                    printf("Word %d: ", i + 1);
-                    scanf("%1023s", word); // Read a single word
-                    getchar(); // Consume the newline character
-                    StrList_insertLast(list, word);
-                }
+                getline(&word,&numWords,stdin);
+                StrList_insertLast(list, word);
+                
                 break;
             case 2:
                 printf("Enter index and string to insert: ");
