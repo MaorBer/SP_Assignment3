@@ -3,14 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct _StrList {
-    Node *head;
-};
-
+// Forward declaration of Node
 typedef struct Node {
     char *data;
     struct Node *next;
 } Node;
+
+struct _StrList {
+    Node *head;
+};
 
 StrList* StrList_alloc() {
     StrList* list = (StrList*)malloc(sizeof(StrList));
@@ -22,21 +23,21 @@ StrList* StrList_alloc() {
     return list;
 }
 
-void StrList_free(StrList* StrList) {
-    if (StrList == NULL) return;
-    Node* current = StrList->head;
+void StrList_free(StrList* list) {
+    if (list == NULL) return;
+    Node* current = list->head;
     while (current != NULL) {
         Node* next = current->next;
         free(current->data);
         free(current);
         current = next;
     }
-    free(StrList);
+    free(list);
 }
 
-size_t StrList_size(const StrList* StrList) {
+size_t StrList_size(const StrList* list) {
     size_t count = 0;
-    Node* current = StrList->head;
+    Node* current = list->head;
     while (current != NULL) {
         count++;
         current = current->next;
@@ -44,46 +45,31 @@ size_t StrList_size(const StrList* StrList) {
     return count;
 }
 
-void StrList_insertLast(StrList* StrList, const char* data) {
-    // Parse the input string to extract individual words
-    const char* delimiter = " ";
-    char* token = strtok((char*)data, delimiter);
+void StrList_insertLast(StrList* list, const char* data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = strdup(data); // Directly copy the input string
+    newNode->next = NULL;
 
-    while (token != NULL) {
-        // Allocate memory for the new node
-        Node* newNode = (Node*)malloc(sizeof(Node));
-        if (newNode == NULL) {
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(EXIT_FAILURE);
+    if (list->head == NULL) {
+        list->head = newNode;
+    } else {
+        Node* current = list->head;
+        while (current->next != NULL) {
+            current = current->next;
         }
-
-        // Allocate memory and copy the word into the new node
-        newNode->data = strdup(token);
-        newNode->next = NULL;
-
-        // If the list is empty, set the new node as the head
-        if (StrList->head == NULL) {
-            StrList->head = newNode;
-        } else {
-            // Traverse the list to find the last node
-            Node* current = StrList->head;
-            while (current->next != NULL) {
-                current = current->next;
-            }
-            // Append the new node to the end of the list
-            current->next = newNode;
-        }
-
-        // Move to the next word
-        token = strtok(NULL, delimiter);
+        current->next = newNode;
     }
 }
 
 
-void StrList_insertAt(StrList* StrList, const char* data, int index) {
-    if (index < 0 || index > StrList_size(StrList)) {
+void StrList_insertAt(StrList* list, const char* data, int index) {
+    if (index < 0 || index > StrList_size(list)) {
         fprintf(stderr, "Invalid index\n");
-        exit(EXIT_FAILURE);
+        return; // Use return instead of exit, to not terminate the entire program
     }
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (newNode == NULL) {
@@ -91,12 +77,13 @@ void StrList_insertAt(StrList* StrList, const char* data, int index) {
         exit(EXIT_FAILURE);
     }
     newNode->data = strdup(data);
+    newNode->next = NULL;
 
     if (index == 0) {
-        newNode->next = StrList->head;
-        StrList->head = newNode;
+        newNode->next = list->head;
+        list->head = newNode;
     } else {
-        Node* current = StrList->head;
+        Node* current = list->head;
         for (int i = 0; i < index - 1; i++) {
             current = current->next;
         }
@@ -113,17 +100,18 @@ char* StrList_firstData(const StrList* StrList) {
     return StrList->head->data;
 }
 
-void StrList_print(const StrList* StrList) {
-    Node* current = StrList->head;
-    if(current != NULL){
-        printf("%s", current->data);
-        current = current->next;
-        do{
-            printf(" %s", current->data);
-            current = current->next;
-        }while (current != NULL)
+void StrList_print(const StrList* list) {
+    if (list->head == NULL) {
+        printf("List is empty\n");
+        return;
     }
-    printf("\n");
+    Node* current = list->head;
+    while (current != NULL) {
+        printf("%s", current->data);
+        if (current->next != NULL) printf(" "); // Add space between words, but not after the last word
+        current = current->next;
+    }
+    printf("\n"); // Print newline at the end
 }
 
 void StrList_printAt(const StrList* StrList, int index) {

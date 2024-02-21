@@ -40,13 +40,13 @@ size_t StrList_size(const StrList* StrList);
  * Inserts an element in the end of the StrList.
  */
 void StrList_insertLast(StrList* StrList,
-                      const char* data);
+					  const char* data);
 
 /*
 * Inserts an element at given index
 */
 void StrList_insertAt(StrList* StrList,
-    const char* data,int index);
+	const char* data,int index);
 
 /*
  * Returns the StrList first data.
@@ -74,12 +74,12 @@ Given a string, return the number of times it exists in the list.
 int StrList_count(StrList* StrList, const char* data);
 
 /*
-    Given a string and a list, remove all the appearances of this string in the list.
+	Given a string and a list, remove all the appearences of this string in the list.
 */
 void StrList_remove(StrList* StrList, const char* data);
 
 /*
-    Given an index and a list, remove the string at that index.
+	Given an index and a list, remove the string at that index.
 */
 void StrList_removeAt(StrList* StrList, int index);
 
@@ -96,19 +96,18 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2);
 StrList* StrList_clone(const StrList* StrList);
 
 /*
- * Reverses the given StrList. 
+ * Reverces the given StrList. 
  */
-void StrList_reverse(StrList* StrList);
+void StrList_reverse( StrList* StrList);
 
 /*
- * Sorts the given list in lexicographical order 
+ * Sort the given list in lexicographical order 
  */
-void StrList_sort(StrList* StrList);
+void StrList_sort( StrList* StrList);
 
 /*
  * Checks if the given list is sorted in lexicographical order
  * returns 1 for sorted,   0 otherwise
  */
-int StrList_isSorted(const StrList* StrList);
+int StrList_isSorted(StrList* StrList);
 
-#endif /* STRLIST_H */
