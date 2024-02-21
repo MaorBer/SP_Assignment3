@@ -11,8 +11,10 @@ int main() {
     }
 
     int choice;
-    char word[1024]; // Buffer for input words
+    size_t words; // Buffer for input words
     int numWords, index;
+    char *buffer;
+
 
     do {
         printf("\nMenu:\n");
@@ -39,11 +41,15 @@ int main() {
             case 1:
                 printf("Enter the number of words you want to enter: ");
                 scanf("%d", &numWords);
-                getchar(); // Consume the newline character
-                getline(&word,&numWords,stdin);
-                StrList_insertLast(list, word);
-                
-                break;
+                buffer = (char *)malloc(bufsize * sizeof(char));
+                if(buffer == NULL){
+                    perror("Unable to allocate buffer");
+                    exit(1);
+                    }
+                printf("Type something: ");
+                wordss = getline(&buffer,&bufsize,stdin);
+                StrList_insertLast(list, words);
+                 break;
             case 2:
                 printf("Enter index and string to insert: ");
                 scanf("%d", &index);
