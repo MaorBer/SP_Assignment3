@@ -2,13 +2,13 @@
 
 CC = gcc
 CFLAGS = -Wall -g
-TARGET = Main
+TARGET = StrList
 OBJS = StrList.o Main.o
 
 all: $(TARGET)
 
-Main: $(OBJS)
-	$(CC) $(CFLAGS) -o Main $(OBJS)
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
 StrList.o: StrList.c StrList.h
 	$(CC) $(CFLAGS) -c StrList.c
@@ -17,4 +17,4 @@ Main.o: Main.c StrList.h
 	$(CC) $(CFLAGS) -c Main.c
 
 clean:
-	rm -f Main $(OBJS)
+	rm -f $(TARGET) $(OBJS)
