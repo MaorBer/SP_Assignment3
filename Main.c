@@ -11,8 +11,8 @@ int main() {
     }
 
     int choice;
-    char input[1024]; // Buffer for input strings
-    int index;
+    char word[1024]; // Buffer for input words
+    int numWords, index;
 
     do {
         printf("\nMenu:\n");
@@ -28,7 +28,7 @@ int main() {
         printf("10 - Turn the list over\n");
         printf("11 - Deleting the entire list\n");
         printf("12 - Arrange the list according to lexicographical order\n");
-        printf("13 - Check whether the list is arranged in lexicographical order\n");
+        printf("13 - Check whether the list is arranged in lexicographic order\n");
         printf("0 - Exit the program\n");
         printf("Enter your choice: ");
         scanf("%d", &choice); // Read choice as an integer
@@ -37,24 +37,24 @@ int main() {
 
         switch (choice) {
             case 1:
-                printf("Enter strings separated by space (end with newline): ");
-                fgets(input, sizeof(input), stdin); // Use fgets to read the string including spaces
-                char *word = strtok(input, " \n");
-                while (word != NULL) {
+                printf("Enter the number of words you want to enter: ");
+                scanf("%d", &numWords);
+                getchar(); // Consume the newline character
+                for (int i = 0; i < numWords; i++) {
+                    printf("Word %d: ", i + 1);
+                    scanf("%1023s", word); // Read a single word
+                    getchar(); // Consume the newline character
                     StrList_insertLast(list, word);
-                    word = strtok(NULL, " \n");
                 }
                 break;
             case 2:
                 printf("Enter index and string to insert: ");
                 scanf("%d", &index);
                 while (getchar() != '\n'); // Clear the buffer
-                fgets(input, sizeof(input), stdin); // Read the string to insert
-                // Remove the newline character at the end of the input
-                input[strcspn(input, "\n")] = 0;
-                StrList_insertAt(list, input, index);
+                fgets(word, sizeof(word), stdin); // Corrected to use 'word' instead of 'input'
+                word[strcspn(word, "\n")] = 0; // Remove the newline character at the end of the input
+                StrList_insertAt(list, word, index);
                 break;
-            // Implement other cases similarly based on the specified rules...
             case 3:
                 StrList_print(list);
                 break;
@@ -66,7 +66,48 @@ int main() {
                 scanf("%d", &index);
                 StrList_printAt(list, index);
                 break;
-            // Continue with cases 6-13 as per your logic...
+            case 6:
+                printf("Total characters in the list: %d\n", StrList_printLen(list));
+                break;
+            case 7:
+                printf("Enter a string to count: ");
+                fgets(word, sizeof(word), stdin);
+                word[strcspn(word, "\n")] = 0; // Remove newline character
+                printf("Occurrences of '%s': %d\n", word, StrList_count(list, word));
+                break;
+            case 8:
+                printf("Enter a string to delete all occurrences: ");
+                fgets(word, sizeof(word), stdin);
+                word[strcspn(word, "\n")] = 0; // Remove newline character
+                StrList_remove(list, word);
+                break;
+            case 9:
+                printf("Enter index to delete: ");
+                scanf("%d", &index);
+                getchar(); // Clear the buffer
+                StrList_removeAt(list, index);
+                break;
+            case 10:
+                StrList_reverse(list);
+                printf("List reversed.\n");
+                break;
+            case 11:
+                StrList_free(list);
+                list = StrList_alloc(); // Reallocate list to avoid using freed memory
+                printf("List deleted.\n");
+                break;
+            case 12:
+                StrList_sort(list);
+                printf("List arranged in lexicographical order.\n");
+                break;
+            case 13:
+                if (StrList_isSorted(list)) {
+                    printf("The list is arranged in lexicographical order.\n");
+                } else {
+                    printf("The list is not arranged in lexicographical order.\n");
+                }
+                break;
+                
             case 0:
                 printf("Exiting program.\n");
                 break;

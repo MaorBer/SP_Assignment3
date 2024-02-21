@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Forward declaration of Node
 typedef struct Node {
     char *data;
     struct Node *next;
@@ -13,84 +12,102 @@ struct _StrList {
     Node *head;
 };
 
+// Allocate a new, empty StrList
 StrList* StrList_alloc() {
     StrList* list = (StrList*)malloc(sizeof(StrList));
-    if (list == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+    if (!list) {
+        fprintf(stderr, "Memory allocation failed for StrList\n");
+        return NULL;
     }
     list->head = NULL;
     return list;
 }
 
+// Free the StrList and its contents
 void StrList_free(StrList* list) {
-    if (list == NULL) return;
+    if (!list) return;
     Node* current = list->head;
-    while (current != NULL) {
+    while (current) {
         Node* next = current->next;
-        free(current->data);
-        free(current);
+        free(current->data); // Free the string
+        free(current); // Then the node
         current = next;
     }
     free(list);
 }
 
+// Get the size of the StrList
 size_t StrList_size(const StrList* list) {
+    if (!list) return 0;
     size_t count = 0;
-    Node* current = list->head;
-    while (current != NULL) {
+    for (Node* current = list->head; current; current = current->next) {
         count++;
-        current = current->next;
     }
     return count;
 }
 
+// Insert a string at the end of the StrList
 void StrList_insertLast(StrList* list, const char* data) {
+    if (!list || !data) return;
     Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+    if (!newNode) {
+        fprintf(stderr, "Memory allocation failed for Node\n");
+        return;
     }
-    newNode->data = strdup(data); // Directly copy the input string
+    newNode->data = strdup(data);
+    if (!newNode->data) {
+        fprintf(stderr, "String duplication failed\n");
+        free(newNode);
+        return;
+    }
     newNode->next = NULL;
 
-    if (list->head == NULL) {
+    if (!list->head) {
         list->head = newNode;
     } else {
         Node* current = list->head;
-        while (current->next != NULL) {
+        while (current->next) {
             current = current->next;
         }
         current->next = newNode;
     }
 }
 
-
+// Insert a string at a specified index in the StrList
 void StrList_insertAt(StrList* list, const char* data, int index) {
-    if (index < 0 || index > StrList_size(list)) {
-        fprintf(stderr, "Invalid index\n");
-        return; // Use return instead of exit, to not terminate the entire program
+    if (!list || !data || index < 0 || index > StrList_size(list)) {
+        fprintf(stderr, "Invalid operation: Invalid index or NULL data/list\n");
+        return;
     }
     Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+    if (!newNode) {
+        fprintf(stderr, "Memory allocation failed for Node\n");
+        return;
     }
     newNode->data = strdup(data);
-    newNode->next = NULL;
+    if (!newNode->data) {
+        fprintf(stderr, "String duplication failed\n");
+        free(newNode);
+        return;
+    }
 
     if (index == 0) {
         newNode->next = list->head;
         list->head = newNode;
     } else {
         Node* current = list->head;
-        for (int i = 0; i < index - 1; i++) {
+        for (int i = 0; i < index - 1; ++i) {
             current = current->next;
         }
         newNode->next = current->next;
         current->next = newNode;
     }
 }
+
+// Keep other functions as they are but apply similar checks for NULL pointers and ensure
+// proper memory management, especially after operations like strdup fail.
+
+
 
 char* StrList_firstData(const StrList* StrList) {
     if (StrList->head == NULL) {
