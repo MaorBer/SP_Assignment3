@@ -87,6 +87,7 @@ int main() {
             case 0:
                 break;
             default:
+               return EXIT_FAILURE;
         }
     } while (choice != 0);
 
