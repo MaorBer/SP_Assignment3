@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Forward declaration of Node
 typedef struct Node {
     char *data;
     struct Node *next;
@@ -15,19 +14,19 @@ struct _StrList {
 
 StrList* StrList_alloc() {
     StrList* list = (StrList*)malloc(sizeof(StrList));
-    if (list == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+    if (!list) {
+        fprintf(stderr, "Memory allocation failed for StrList\n");
+        return NULL; // Allow the caller to handle allocation failure
     }
     list->head = NULL;
     return list;
 }
 
 void StrList_free(StrList* list) {
-    if (list == NULL) return;
-    Node* current = list->head;
-    while (current != NULL) {
-        Node* next = current->next;
+    if (!list) return;
+    Node *current = list->head, *next;
+    while (current) {
+        next = current->next;
         free(current->data);
         free(current);
         current = next;
@@ -36,32 +35,35 @@ void StrList_free(StrList* list) {
 }
 
 size_t StrList_size(const StrList* list) {
+    if (!list) return 0;
     size_t count = 0;
-    Node* current = list->head;
-    while (current != NULL) {
-        count++;
-        current = current->next;
+    for (Node* current = list->head; current; current = current->next) {
+        ++count;
     }
     return count;
 }
 
 void StrList_insertLast(StrList* list, const char* data) {
+    if (!list || !data) return;
     Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+    if (!newNode) {
+        fprintf(stderr, "Memory allocation failed for newNode\n");
+        return; // No exit here, just return to allow further handling
     }
-    newNode->data = strdup(data); // Directly copy the input string
+    newNode->data = strdup(data);
+    if (!newNode->data) {
+        free(newNode); // Free newNode if strdup fails
+        fprintf(stderr, "Failed to duplicate string\n");
+        return;
+    }
     newNode->next = NULL;
 
-    if (list->head == NULL) {
+    if (!list->head) {
         list->head = newNode;
     } else {
-        Node* current = list->head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
+        Node* tail;
+        for (tail = list->head; tail->next; tail = tail->next);
+        tail->next = newNode;
     }
 }
 

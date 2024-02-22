@@ -39,6 +39,7 @@ int main() {
                 break;
             case 3:
                 StrList_print(list);
+                printf("\n");
                 break;
             case 4:
                 printf("%zu\n", StrList_size(list));
